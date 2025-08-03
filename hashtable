@@ -1,0 +1,35 @@
+import java.io.*;
+import java.util.*;
+
+public class PhoneBookLookup {
+    public static void main(String[] args) throws IOException {
+        Hashtable<String, String> nameToPhone = new Hashtable<>();
+        Hashtable<String, String> phoneToName = new Hashtable<>();
+
+        BufferedReader br = new BufferedReader(new FileReader("contacts.txt"));
+        String line;
+
+        while ((line = br.readLine()) != null) {
+            String[] parts = line.split("\t");
+            if (parts.length == 2) {
+                String name = parts[0];
+                String phone = parts[1];
+                nameToPhone.put(name, phone);
+                phoneToName.put(phone, name);
+            }
+        }
+        br.close();
+
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter Name or Phone Number to search: ");
+        String input = sc.nextLine();
+
+        if (nameToPhone.containsKey(input)) {
+            System.out.println("Phone Number: " + nameToPhone.get(input));
+        } else if (phoneToName.containsKey(input)) {
+            System.out.println("Name: " + phoneToName.get(input));
+        } else {
+            System.out.println("Entry not found.");
+        }
+    }
+}
