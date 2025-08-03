@@ -1,0 +1,52 @@
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
+
+public class TableDisplay extends JFrame {
+
+    public TableDisplay() {
+        setTitle("Table Viewer");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Read the file
+        java.util.List<String[]> rows = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("Table.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                rows.add(parts);
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error reading file: " + e.getMessage());
+            return;
+        }
+
+        // If file is empty or invalid
+        if (rows.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Table is empty or file not found.");
+            return;
+        }
+
+        // Determine number of rows and columns
+        int rowsCount = rows.size();
+        int colsCount = rows.get(0).length;
+
+        // Set layout
+        setLayout(new GridLayout(rowsCount, colsCount));
+
+        // Add labels
+        for (String[] row : rows) {
+            for (String cell : row) {
+                add(new JLabel(cell, SwingConstants.CENTER));
+            }
+        }
+
+        setSize(400, 200);
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new TableDisplay();
+    }
+}
