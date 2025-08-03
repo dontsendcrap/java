@@ -1,0 +1,73 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class MouseEventDemo extends JFrame {
+
+    String message = "";
+
+    public MouseEventDemo() {
+        setTitle("Mouse Event Demo");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Custom panel to display the event message
+        JPanel panel = new JPanel() {
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.setFont(new Font("Arial", Font.BOLD, 20));
+                FontMetrics fm = g.getFontMetrics();
+                int x = (getWidth() - fm.stringWidth(message)) / 2;
+                int y = getHeight() / 2;
+                g.drawString(message, x, y);
+            }
+        };
+
+        // Add mouse adapter to handle events
+        panel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                message = "Mouse Clicked";
+                panel.repaint();
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                message = "Mouse Entered";
+                panel.repaint();
+            }
+
+            public void mouseExited(MouseEvent e) {
+                message = "Mouse Exited";
+                panel.repaint();
+            }
+
+            public void mousePressed(MouseEvent e) {
+                message = "Mouse Pressed";
+                panel.repaint();
+            }
+
+            public void mouseReleased(MouseEvent e) {
+                message = "Mouse Released";
+                panel.repaint();
+            }
+        });
+
+        panel.addMouseMotionListener(new MouseMotionAdapter() {
+            public void mouseMoved(MouseEvent e) {
+                message = "Mouse Moved";
+                panel.repaint();
+            }
+
+            public void mouseDragged(MouseEvent e) {
+                message = "Mouse Dragged";
+                panel.repaint();
+            }
+        });
+
+        add(panel);
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new MouseEventDemo();
+    }
+}
