@@ -1,0 +1,35 @@
+import java.applet.Applet;
+import java.awt.*;
+import java.awt.event.*;
+
+/*
+<applet code="FactorialApplet" width=300 height=200></applet>
+*/
+
+public class FactorialApplet extends Applet implements ActionListener {
+    TextField inputField, resultField;
+    Button compute;
+
+    public void init() {
+        inputField = new TextField(5);
+        resultField = new TextField(10);
+        compute = new Button("Compute");
+
+        add(new Label("Enter Number:"));
+        add(inputField);
+        add(compute);
+        add(new Label("Factorial:"));
+        add(resultField);
+
+        compute.addActionListener(this);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        int n = Integer.parseInt(inputField.getText());
+        long fact = 1;
+        for (int i = 2; i <= n; i++) {
+            fact *= i;
+        }
+        resultField.setText(String.valueOf(fact));
+    }
+}
