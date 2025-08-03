@@ -1,0 +1,55 @@
+class SharedBuffer {
+    int data;
+    boolean isAvailable = false;
+
+    synchronized void produce(int value) {
+        while (isAvailable) {
+            try { wait(); } catch (InterruptedException e) {}
+        }
+        data = value;
+        isAvailable = true;
+        System.out.println("Produced: " + data);
+        notify();
+    }
+
+    synchronized void consume() {
+        while (!isAvailable) {
+            try { wait(); } catch (InterruptedException e) {}
+        }
+        System.out.println("Consumed: " + data);
+        isAvailable = false;
+        notify();
+    }
+}
+
+class Producer extends Thread {
+    SharedBuffer buffer;
+    Producer(SharedBuffer b) { buffer = b; }
+
+    public void run() {
+        for (int i = 1; i <= 5; i++) {
+            buffer.produce(i);
+            try { Thread.sleep(500); } catch (InterruptedException e) {}
+        }
+    }
+}
+
+class Consumer extends Thread {
+    SharedBuffer buffer;
+    Consumer(SharedBuffer b) { buffer = b; }
+
+    public void run() {
+        for (int i = 1; i <= 5; i++) {
+            buffer.consume();
+            try { Thread.sleep(500); } catch (InterruptedException e) {}
+        }
+    }
+}
+
+public class ProducerConsumerDemo {
+    public static void main(String[] args) {
+        SharedBuffer buffer = new SharedBuffer();
+        new Producer(buffer).start();
+        new Consumer(buffer).start();
+    }
+}
